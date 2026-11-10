@@ -1,53 +1,75 @@
-const Gameboard = generateGameboard();
-const players = [ 'O', 'X' ];
+const Gameboard = (() => {
+  const board = generateGameboard();
 
-function generateGameboard () {
-  const gameBoard = [];
+  function generateGameboard () {
+    const gameBoard = [];
 
-  for (let i = 0; i < 3; i++) {
-    const temp = new Array(3).fill('.');
-    gameBoard.push(temp);
+    for (let i = 0; i < 3; i++) {
+      const temp = new Array(3).fill('.');
+      gameBoard.push(temp);
+    }
+    return gameBoard;
   }
-  return gameBoard;
-}
 
-function playMark(board, row, col, player) {
-  const isRange = (row >= 0) && (row < 3) &&
-    (col >= 0) && (col < 3)
+  const placeMark = (row, col, mark) => {
+    const isRange = (row >= 0) && (row < 3) &&
+      (col >= 0) && (col < 3)
 
-  if (!isRange) return false;
+    if (!isRange) return false;
 
-  const cell = board[row][col];
-  if (cell === '.') {
-    board[row][col] = player;
-    return true;
+    const cell = board[row][col];
+    if (cell === '.') {
+      board[row][col] = mark;
+      return true;
+    }
+    return false;
   }
-  return false;
-}
 
-function printGameboard(board) {
-  console.table(board);
-}
+  const reset = () => board.forEach( row => row.fill('.') );
 
-const LINES = [
-  [ [0, 0], [0, 1], [0, 2] ],
-  [ [1, 0], [1, 1], [1, 2] ],
-  [ [2, 0], [2, 1], [2, 2] ],
-  [ [0, 0], [1, 0], [2, 0] ],
-  [ [0, 1], [1, 1], [2, 1] ],
-  [ [0, 2], [1, 2], [2, 2] ],
-  [ [0, 0], [1, 1], [2, 2] ],
-  [ [0, 2], [1, 1], [2, 0] ],
-]
+  const isFull = () => board.every( (row) => row.every( cell => cell !== '.' ) );
+  
+  const getCell = (row, col) => board[row][col]
 
-function checkWinner(board, lines=LINES) {
-  for (const line of lines) {
-    const [a, b, c] = line.map( ([row, col]) => board[row][col] );
-    if (a !== '.' && a === b && b === c) return a;
+  return { 
+    getCell, placeMark, reset, isFull 
   }
-  return null;
-}
 
-playMark(Gameboard, 1, 1, players[0]);
-playMark(Gameboard, 2, 1, players[1]);
+})();
+
+const Game = ( () => {
+  const LINES = [
+    [ [0, 0], [0, 1], [0, 2] ],
+    [ [1, 0], [1, 1], [1, 2] ],
+    [ [2, 0], [2, 1], [2, 2] ],
+    [ [0, 0], [1, 0], [2, 0] ],
+    [ [0, 1], [1, 1], [2, 1] ],
+    [ [0, 2], [1, 2], [2, 2] ],
+    [ [0, 0], [1, 1], [2, 2] ],
+    [ [0, 2], [1, 1], [2, 0] ],
+  ]
+
+  function checkWinner(lines=LINES) {
+    for (const line of lines) {
+      const [a, b, c] = line.map( ([row, col]) => Gameboard.getCell(row, col));
+      if (a !== '.' && a === b && b === c) return a;
+    }
+    return null;
+  }
+
+  return { checkWinner }
+
+})();
+
+const Players = ( () => {
+  const players = [ 'O', 'X' ];
+
+  return { players }
+})();
+
+
+
+
+placeMark(Gameboard, 1, 1, players[0]);
+placeMark(Gameboard, 2, 1, players[1]);
 printGameboard(Gameboard);
