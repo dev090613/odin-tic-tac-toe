@@ -1,3 +1,8 @@
+const Player = (sign) => {
+  const getSign = () => sign;
+  return { getSign }
+}
+
 const Gameboard = (() => {
   const board = generateGameboard();
 
