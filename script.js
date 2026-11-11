@@ -49,27 +49,51 @@ const Game = ( () => {
     [ [0, 2], [1, 1], [2, 0] ],
   ]
 
-  function checkWinner(lines=LINES) {
-    for (const line of lines) {
-      const [a, b, c] = line.map( ([row, col]) => Gameboard.getCell(row, col));
+  const players = [
+    { name: 'Player1', mark: 'X' },
+    { name: 'Player2', mark: 'O' }
+  ];
+
+  let turnIndex = 0;
+
+  const getStatus = (board) => {
+    const winner = checkWinner(board);
+    if (winner) return { status: 'won', winner: players.find(p => p.mark === winner) };
+    if (board.isFull()) return { status: 'draw', winner: null };
+    return { status: 'playing', winner: null };
+  }
+
+  const checkWinner = (board) => {
+    for (const line of LINES) {
+      const [a, b, c] = line.map( ([row, col]) => board.getCell(row, col));
       if (a !== '.' && a === b && b === c) return a;
     }
     return null;
   }
 
-  return { checkWinner }
+  function playTurn(board, row, col) {
+    if (!getStatus(board).status !== 'playing') return false;
+
+    const player = getCurrentPlayer();
+    const mark = player.mark;
+
+    if (!board.placeMark(row, col, mark)) {
+      return false
+    }
+
+    turnIndex = (turnIndex + 1) % players.length;
+    return true
+  };
+
+  const getCurrentPlayer = () => players[turnIndex];
+  const reset = () => { 
+    turnIndex = 0 
+  };
+
+  return { checkWinner, getStatus, getCurrentPlayer, reset, playTurn }
 
 })();
 
-const Players = ( () => {
-  const players = [ 'O', 'X' ];
-
-  return { players }
-})();
 
 
-
-
-placeMark(Gameboard, 1, 1, players[0]);
-placeMark(Gameboard, 2, 1, players[1]);
-printGameboard(Gameboard);
+Gameboard.getCell(0, 0)
