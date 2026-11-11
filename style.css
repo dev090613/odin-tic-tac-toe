@@ -33,8 +33,9 @@ button {
 /* MY CSS */
 :root {
   --clr-bg: #c5c3c6;
+  --clr-cell-bg: whitesmoke;
   --clr-header-bg: #4c5c68;
-
+  --clr-border: #2a3a46;
   --clr-header-text: #b0e4db;
 }
 
@@ -50,7 +51,7 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: solid 2px black;
+  border-bottom: solid 2px var(--clr-border);
   padding: 0.5rem 0;
   background-color: var(--clr-header-bg);
 }
@@ -59,4 +60,64 @@ header > h1 {
   line-height: 1.4;
   font-size: 5rem;
   color: var(--clr-header-text);
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  padding: 2rem 1rem;
+}
+
+h2.player-turn {
+  font-size: 2rem;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  aspect-ratio: 1;
+  width: min(100%, 25rem);
+  gap: 1px;
+  background-color: var(--clr-border);
+  border: 2px solid var(--clr-border);
+}
+
+.cell {
+  background-color: var(--clr-cell-bg);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.cell:hover {
+  background-color: #d8e4e9;
+}
+
+/* FOOTER */
+footer {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gh-link {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 100;
+}
+
+.github-logo {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  transition: transform 0.3s ease-in-out;
+}
+
+.gh-link:hover .github-logo {
+  transform: rotate(360deg) scale(1.2);
 }
