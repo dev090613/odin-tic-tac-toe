@@ -22,7 +22,7 @@ const gameBoard = ( () => {
 
   const getBoard = () => [...board];
 
-  const reset = () => board.fill(".");
+  const reset = () => board.fill("");
 
   return { setField, getField, getBoard, reset };
 })();
