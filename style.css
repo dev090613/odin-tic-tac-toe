@@ -72,7 +72,7 @@ main {
 }
 
 h2.player-turn {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
 }
 
 .container {
@@ -93,9 +93,45 @@ h2.player-turn {
   cursor: pointer;
 }
 
+.cell.x {
+  color: #263a46;
+}
+
+.cell.o {
+  color: #3f7f74;
+}
+
+.cell {
+  font-size: clamp(3rem, 12vw, 5rem);
+  line-height: 1;
+}
+
 .cell:hover {
   background-color: #d8e4e9;
 }
+
+.container.finished .cell {
+  cursor: default;
+}
+
+.container.finished .cell:hover {
+  background-color: var(--clr-cell-bg);
+}
+
+.restart-btn {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  padding: 0.4rem 1.5rem;
+  border-radius: 7px;
+  background-color: var(--clr-header-bg);
+  color: var(--clr-header-text);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.restart-btn:hover {
+  transform: translateY(-1px); 
+}
+
 
 /* FOOTER */
 footer {
@@ -112,8 +148,8 @@ footer {
 }
 
 .github-logo {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   vertical-align: middle;
   transition: transform 0.3s ease-in-out;
 }

@@ -4,7 +4,7 @@ const Player = (sign) => {
 }
 
 const gameBoard = ( () => {
-  const board = Array.from(9).fill(".");
+  const board = Array(9).fill("");
 
   const isValidIndex = (index) =>
     (Number.isInteger(index) && index >= 0 && index < board.length);
@@ -51,7 +51,7 @@ const gameController = (() => {
 
     return winningCombos
       .filter( (combo) => combo.includes(index) )
-      .some( (combo) => combo.every( (i) => gameboard.getField(i) === sign ) )
+      .some( (combo) => combo.every( (i) => gameBoard.getField(i) === sign ) )
   }
 
   const playRound = (index) => {
@@ -84,3 +84,68 @@ const gameController = (() => {
   return { playRound, getCurrentPlayerSign, getIsOver, reset }
 
 })();
+
+const displayController = (() => {
+  const containerEl = document.querySelector(".container");
+  const cells = document.querySelectorAll(".cell");
+  const messageEl = document.querySelector(".player-turn");
+  const restartBtn = document.querySelector("#restartBtn");
+
+  const setMessage = (text) => {
+    messageEl.textContent = text;
+    return;
+  }
+
+  const renderBoard = () => {
+    const board = gameBoard.getBoard()
+    cells.forEach( (cell, i) => {
+      cell.textContent = board[i];
+      cell.classList.toggle('x', board[i] === 'X');
+      cell.classList.toggle('o', board[i] === 'O');
+    });
+  };
+
+  const turnMessage = () => `Player ${gameController.getCurrentPlayerSign()}'s turn!`;
+
+  const handleBoardClick = (e) => {
+    const cell = e.target.closest(".cell");
+    if (!cell) return ;
+
+    const index = Number(cell.dataset.index);
+    const result = gameController.playRound(index);
+    console.log(result)
+
+    if (result.status === "continue") {
+      renderBoard();
+      setMessage(turnMessage());
+    } else if (result.status === "win") {
+      renderBoard();
+      setMessage(`Player ${result.sign} has won!`);
+      containerEl.classList.add("finished")
+    } else if (result.status === "draw") {
+      renderBoard();
+      setMessage("It's a draw!");
+      containerEl.classList.add("finished")
+    }
+    // occupied, invalid -> 아무것도 하지 않음
+  }
+
+  const handleRestart = () => {
+    containerEl.classList.remove("finished")
+    gameController.reset();
+    renderBoard();
+    setMessage(turnMessage());
+  }
+
+  const init = () => {
+    containerEl.addEventListener("click", handleBoardClick);
+    restartBtn.addEventListener("click", handleRestart);
+    renderBoard();
+    setMessage(turnMessage());
+  };
+
+  init();
+  return { setMessage }
+
+})();
+
