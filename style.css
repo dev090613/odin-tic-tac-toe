@@ -34,9 +34,12 @@ button {
 :root {
   --clr-bg: #c5c3c6;
   --clr-cell-bg: whitesmoke;
+  --clr-cell-bg-hover: #d8e4e9;
   --clr-header-bg: #4c5c68;
   --clr-border: #2a3a46;
   --clr-header-text: #b0e4db;
+  --clr-cell-x: #263a46;
+  --clr-cell-o: #3f7f74;
 }
 
 body {
@@ -107,7 +110,7 @@ h2.player-turn {
 }
 
 .cell:hover {
-  background-color: #d8e4e9;
+  background-color: var(--clr-cell-bg-hover);
 }
 
 .container.finished .cell {
@@ -129,7 +132,8 @@ h2.player-turn {
 }
 
 .restart-btn:hover {
-  transform: translateY(-1px); 
+  transform: 
+    scale(1.05);
 }
 
 
