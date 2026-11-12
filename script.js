@@ -3,6 +3,30 @@ const Player = (sign) => {
   return { getSign }
 }
 
+const gameBoard = ( () => {
+  const board = Array.from(9).fill(".");
+
+  const isValidIndex = (index) =>
+    (Number.isInteger(index) && index >= 0 && index < board.length);
+
+  const setField = (index, sign) => {
+    if (!isValidIndex(index)) return false;
+    board[index] = sign;
+    return true;
+  };
+
+  const getField = (index) => {
+    if (!isValidIndex(index)) return undefined;
+    return board[index];
+  };
+
+  const getBoard = () => [...board];
+
+  const reset = () => board.fill(".");
+
+  return { setField, getField, getBoard, reset };
+})();
+
 const Gameboard = (() => {
   const board = generateGameboard();
 
